@@ -1,5 +1,6 @@
 # Importing all libraries
 import pandas as pd
+import pymongo
 from openpyxl import load_workbook
 from fastapi import FastAPI,Request
 from typing import Optional
@@ -7,8 +8,9 @@ from typing import Optional
 # Importing all helper functions
 import add_dish as add
 import orders as ord
-import order_status as os
+# import order_status as os
 import create_menu as mcr
+# import bill as bl
 
 # FastAPI 
 app = FastAPI()
@@ -29,12 +31,6 @@ async def post_form(request: Request):
         result=ord.order_details(req_info["DISH_NAME"],req_info["QUANTITY"],req_info["SPL_REQ"],["Order_Status"])
         return result
 
-# Updating order Status
-@app.post('/status-update')
-async def post_form(request: Request):
-        req_info = await request.json()
-        result=os.change_status(req_info["UID"],req_info["Order_Status"])
-        return result
 
 # Creating menu
 @app.post('/menu_created')
