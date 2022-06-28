@@ -1,18 +1,21 @@
 # Importing required Libraries
 import pandas as pd
 import uuid
+import pymongo
+connectionstring="mongodb+srv://rb0777:Galaxys9plus@cluster0.zuny1ac.mongodb.net/test"
+myclient = pymongo.MongoClient(connectionstring)
+#Creating database
+mydb = myclient["Restaurant_model"]
+posts_4=mydb.orders
 
 # Function for getting order details
 def order_details(Name,Quantity,Spl_req,Order_Status):
     try:
-        id = uuid.uuid1()
-        # Reading  excel file 
-        df = pd.read_excel("orders.xlsx")
+        id = str(uuid.uuid1())
         # Adding required columns
-        df = df.append({"UID":id.int,"DISH_NAME":Name,"QUANTITY":Quantity,"SPL_REQ":Spl_req,"Order_Status":'Order_Accepted'}, ignore_index=True)
-        # Saving excel file
-        df.to_excel("orders.xlsx",index=False)
+        posts_id4=posts_4.insert_one({"UID":id,"DISH_NAME":Name,"QUANTITY":Quantity,"SPL_REQ":Spl_req,"Order_Status":'Order_Accepted'}).inserted_id
+        print(posts_id4)
         return "order_created"
-
     except:
-        return "Order can't be created"
+        return "Order not created"
+    
