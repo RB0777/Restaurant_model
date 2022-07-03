@@ -8,9 +8,10 @@ from typing import Optional
 # Importing all helper functions
 import add_dish as add
 import orders as ord
-# import order_status as os
+import order_status as os
 import create_menu as mcr
-# import bill as bl
+import bill_generate as bg
+
 
 # FastAPI 
 app = FastAPI()
@@ -37,5 +38,19 @@ async def post_form(request: Request):
 async def post_form(request: Request):
         req_info = await request.json()
         result=mcr.Create_Menu(req_info["DISH_NAME"],req_info["VEG/NON-VEG"],req_info["PRICE:QUARTER"],req_info["PRICE:HALF"],req_info["PRICE:FULL"])
+        return result
+
+# Order status update
+@app.post('/status-update')
+async def post_form(request: Request):
+        req_info = await request.json()
+        result=os.order_update(req_info["id"],req_info["Order_Status"])
+        return result
+
+# generating bill
+@app.post('/bill_generate')
+async def post_form(request: Request):
+        req_info = await request.json()
+        result=bg.fetch_quantity(req_info["id"])
         return result
 
